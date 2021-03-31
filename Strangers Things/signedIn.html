@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="signedInstyle.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <script defer src="signedIn.js"></script>
+    <title>Stranger's Things</title>
+</head>
+<body>
+<div id='app'>
+    <div class="topnav">
+        <div class="headline"></div>
+        <div class="activeName"></div>
+        <button class='log-out-button' type='button'>LOGOUT</button>
+        <input id="myInput" type="text" placeholder="Search..">      
+     </div>
+
+     <div class="hero-image">
+      <div class="hero-text">
+        <h1 class='userNameHead'>Welcome to Stranger's Things</h1>
+        <p>Buy and sell strange things here!</p>
+      </div>
+    </div>
+
+    <!-- Tab links -->
+<div class="tab">
+    <button class="tablinks" onclick="openType(event, 'forSale')" id='defaultOpen'><h1>FOR SALE</h1></button>
+    <button class="tablinks" onclick="openType(event, 'yourThings')"><h1>MY THINGS</h1></button>
+    <button class="tablinks" onclick="openType(event, 'messages')"><h1>MESSAGES</h1></button>
+    <button class="tablinks" onclick="openType(event, 'sellThings')"><h1>SELL THINGS</h1></button>
+  </div>
+  
+  <div class="user-dash">
+  <div id="forSale" class="tabcontent">
+    <div class='post-container grid'>
+    </div>
+  </div>
+
+  <div id="yourThings" class="tabcontent">
+    <div class='your-post-container'>
+    </div>
+  </div>
+    
+  <div id="messages" class="tabcontent">
+    <div class='message-container'>
+    </div>
+  </div>
+
+  <div id="sellThings" class="tabcontent">
+    <div class='sellThings-container'>
+        <div id='post-form'>
+            <lablel class='post-form-fields'>Post Title</lablel><br >
+            <input required type='text' placeholder='Post Title' id='post-title' maxlength="50"><br >
+            <lablel class='post-form-fields'>Price</lablel><br >
+            <input required type='text' placeholder='Price' id='price' maxlength="50"><br >
+            <label class='post-form-fields'>Post Description</label><br >
+            <textarea maxlength="250" required type='text' placeholder='Description' id='post-description'> </textarea><br >
+            <button class='post-submit' type='submit'>CREATE POST</button>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+</div>
+

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <script defer src="app.js"></script>
+    <title>Stranger's Things</title>
+</head>
+<body>
+<div id='app'>
+    <div class="topnav">
+        <div class="headline"></div>
+        <div class="activeName"></div>
+        <button id="myBtnReg">REGISTER</button>
+        <button id="myBtn">LOGIN</button>
+        <button class='log-out-button' type='button'>LOGOUT</button>
+        <input id='myInput' type="text" placeholder="Search.." name="search">      
+     </div>
+
+     <div class="hero-image">
+      <div class="hero-text">
+        <h1 style="font-size:50px">Welcome to Stranger's Things</h1>
+        <p>Register to buy and sell strange things here!</p>
+         
+      </div>
+    </div>
+  
+
+    <div class='post-container grid'>
+    </div>
+
+    <div class='row' id='footNav'>
+        <div class='column'>
+            <div class="nav">
+                <h5 class="nav-logo">Logo</h5>
+                <a class="nav-item" href="#">Item</a>
+                <a class="nav-item" href="#">Item</a>
+              </div>
+        </div>
+    </div>
+
+
+
+
+ <div id='post-form'>
+      <h3>CREATE A POST</h3>
+      <lablel>Post Title</lablel><br >
+      <input required type='text' placeholder='Post Title' id='post-title' maxlength="50"><br >
+      <label>Post Description</label><br >
+      <textarea maxlength="250" required type='text' placeholder='Description' id='post-description'> </textarea><br >
+      <button class='post-submit' type='submit'>CREATE POST</button>
+  </div>
+
+
+<!-- The REGISTRATION Modal -->
+<div id="myModalReg" class="modalReg">
+
+  <!-- Modal content -->
+  <div class="modal-content-reg">
+    <span class="closeReg">&times;</span>
+    <form id='register-form'>
+      <h3>REGISTER</h3>
+      <lablel>UserName</lablel><br >
+      <input required type='text' placeholder='username' id='user-name' minlength="5"><br >
+      <label>Password</label><br >
+      <input required type='text' placeholder='password' id='user-password' minlength="5"><br >
+      <div class='reg-error'></div>
+      <button type='submit'>REGISTER</button>
+    </form>
+  </div>
+
+</div>
+
+<!-- The LOGIN Modal -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <form id='login-form'>
+      <h3>LOGIN</h3>
+      <lablel>UserName</lablel><br >
+      <input required type='text' placeholder='username' id='log-user-name' ><br >
+      <label>Password</label><br >
+      <input required type='text' placeholder='password' id='log-user-password' ><br >
+      <div class="login-error"></div>
+      <button type='submit'>LOGIN</button>
+  </form> 
+  </div>
+
+</div>
+
+
+
+</div>
+
+
+
+
+  
+
+
+    
+
+
+
+
