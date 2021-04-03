@@ -6,10 +6,7 @@ let myToken = JSON.parse(localStorage.getItem('token'))
    return localStorage.getItem('token')
   }
 
-  function loggedInUserClasses () {
-    $('.edit').addClass('isUser').removeClass('notUser')
-    $('.delete').addClass('isUser').removeClass('notUser')
-  }
+  
 
 
 async function allPostsAtState () {
@@ -19,13 +16,23 @@ async function allPostsAtState () {
  
       posts.forEach((post) => {
         const postHTML = createPostHTML(post);
-        $(".post-container").append(postHTML);
-          if (post.isAuthor === true) {
-            console.log(post.isAuthor, 'this is the is author')
-            $(".post_actions").children('.message').addClass('notUser')
-          } else {
-            $(".post_actions").children('.message').removeClass('notUser')
-          }
+
+        if(post.isAuthor) {
+          let yourContainer = $(".your-post-container");
+          yourContainer.append(postHTML);
+          $('#yourThings .post_actions').html(`
+          <button class='delete-my-post'>DELETE</button>
+            `)
+        } else if (!post.isAuthor) {
+          $(".post-container").append(postHTML);
+          $('#forSale .post_actions').html(`
+          <form class='message-form'>
+            <lablel>Message</lablel><br >
+            <input required type='text' placeholder='Message' class='userMessageContent'><br >
+            <button type='click' class='messageSubmit'>SUBMIT</button>
+          </form>
+            `)
+        }
 
       });
 
@@ -38,27 +45,27 @@ async function allPostsAtState () {
 }
 
 allPostsAtState()
-;
+
 async function myPostsState () {
 
   
   try {
     const posts = await fetchMyData();
     let postArr = await posts.posts
-     for (let i = 0; i < postArr.length; i++) {
-      let thePosts = postArr[i]
-      let createMyPosts = createMyPostHTML(thePosts);
-      if (thePosts.active === false) {
-        console.log(thePosts.active, 'this is the is active posts')
-        $(".your-post-container").children('.cards').addClass('notUser')
-      }
-      $(".your-post-container").prepend(createMyPosts);
-     
+    let messageArr = await posts.messages
+    console.log(messageArr, 'these should be my messages')
+    console.log(postArr, 'these should be my posts')
+  
+/// this goes through the messages
 
+     for (let i = 0; i < messageArr.length; i++) {
+      let theMessages = messageArr[i]
+      let createMyMessages = createMessageHTML(theMessages);
+      $(".message-container").prepend(createMyMessages);
      }
 
      $('.userNameHead').text(`Hi, ${posts.username}!`)
-     loggedInUserClasses ()
+    
 
       return posts;
 
@@ -69,27 +76,29 @@ async function myPostsState () {
 
 myPostsState ()
 
-const createMyPostHTML = (posts) => {
-	return ($(`
-      <div class="cards">
-      <div class="flip-card-inner">
-        <div class='card_front'>
-            <div class='post_header'><p>${posts.title}</p></div>
-            <div class='post_price'><p>${posts.price}</p></div>
-        </div>
-        <div class='card_back'>  
-        <div class='post_header_back'><p>${posts.title}</p></div>
-        <div class='post_price_back'><p>${posts.price}</p></div>
-            <div class='post_desc_back'><p>${posts.description}</p></div>
-            <div class='post_actions'>
-                <button class='delete-my-post'>DELETE</button>
-                <button class='edit-my-post'>EDIT</button>
-            </div>
-        </div>
-    </div>
-    </div>
-  `).data('posts', posts))
-};
+// const createMyPostHTML = (posts) => {
+// 	return ($(`
+//       <div class="cards">
+//       <div class="flip-card-inner">
+//         <div class='card_front'>
+//             <div class='post_header'><p>${posts.title}</p></div>
+//             <div class='post_price'><p>${posts.price}</p></div>
+//             <div class='post_active_front'><p>Is Active? ${posts.active}</p></div>
+//         </div>
+//         <div class='card_back'>  
+//         <div class='post_header_back'><p>${posts.title}</p></div>
+//         <div class='post_price_back'><p>${posts.price}</p></div>
+//             <div class='post_desc_back'><p>${posts.description}</p></div>
+//             <div class='post_active_back'><p>Is Active? ${posts.active}</p></div>
+//             <div class='post_actions'>
+//                 <button class='delete-my-post'>DELETE</button>
+//                 <button class='edit-my-post'>EDIT</button>
+//             </div>
+//         </div>
+//     </div>
+//     </div>
+//   `).data('posts', posts))
+// };
 
 async function fetchMyData () {
  try {
@@ -101,6 +110,7 @@ async function fetchMyData () {
   })
 
   const {data} = await response.json();
+  console.log(data, 'data from fetch my data')
   return data; 
 
  } catch(error) {
@@ -108,7 +118,6 @@ async function fetchMyData () {
  }
 
 }
-
 
 async function fetchPosts () {
 
@@ -123,7 +132,7 @@ async function fetchPosts () {
    
     const {data} = await response.json();
     
-    return data.posts
+    return data.posts.reverse()
 
   } catch (error) {
     console.log(error)
@@ -132,35 +141,26 @@ async function fetchPosts () {
 
 const createPostHTML = (post) => {
 	return ($(`
-      <div class="cards">
-      <div class="flip-card-inner">
-        <div class='card_front'>
-            <div class='post_header'><p>${post.title}</p></div>
-            <div class='post_price'><p>${post.price}</p></div>
-            <div class="posted_by">
-                <span>User ${post.author.username}</span>
-            </div>
-        </div>
-        
-        <div class='card_back'>  
-          <div class='post_header_back'><p>${post.title}</p></div>
-          <div class='post_price_back'><p>${post.price}</p></div>
-          <div class='post_desc_back'><p>${post.description}</p></div>
-          <div class='post_actions'>
-          <div>
-          <form class='message-form'>
-              <h3>MESSAGE</h3>
-              <lablel>Name</lablel><br >
-              <input required type='text' placeholder='Name' class='userMessagenName'><br >
-              <label>Your Message</label><br >
-              <input required type='text' placeholder='Message' class='userMessageContent'><br >
-              <button type='submit' class='messageSubmit'>SUBMIT</button>
-            </form>
+            <div class="cards">
+            <div class="flip-card-inner">
+              <div class='card_front'>
+                  <div class='post_header'><p>${post.title}</p></div>
+                  <div class='post_price'><p>${post.price}</p></div>
+                  <div class="posted_by">
+                      <span>User ${post.author.username}</span>
+                  </div>
+              </div>
+              
+              <div class='card_back'>  
+                <div class='post_header_back'><p>${post.title}</p></div>
+                <div class='post_price_back'><p>${post.price}</p></div>
+                <div class='post_desc_back'><p>${post.description}</p></div>
+                <div class='post_actions'>
+                
+              </div>
           </div>
-        </div>
-    </div>
-    </div>
-  `).data('data', post,))
+          </div>
+  `).data('data', post))
 };
 
 
@@ -186,20 +186,26 @@ async function userCreatePost(postObj) {
 
 $('.post-submit').on('click', async function (event) {
   event.preventDefault();
- 
+  
+  
   const postData =  {
     post: {
       title: $('#post-title').val(),
       description: $('#post-description').val(),
-      price: '200',
-      location: 'Lafayette',
+      price: $('#price').val(),
+      location: $('#location').val(),
       willDeliver: false,
       }
     }
     try { 
       const newPost = await userCreatePost(postData)
       const newCreatedPost =  createPostHTML(newPost.data.post)
-      $(".post-container").prepend(newCreatedPost)
+      $(".your-post-container").prepend(newCreatedPost)
+      $('#yourThings .post_actions').html(`
+          <button class='delete-my-post'>DELETE</button>
+            `)
+      $('#post-form').trigger('reset')
+      
 
   } catch (error) {
       console.error(error)
@@ -227,13 +233,14 @@ async function deletePost (postId) {
 }
 
 
-$(".your-post-container").on("click", '.delete-my-post', async function () {
+$(".your-post-container, .post-container").on("click", '.delete-my-post', async function () {
   const postElement = $(this).closest('.cards');
-  const posts = postElement.data('posts');
+  console.log(postElement)
+  const posts = postElement.data('data');
   console.log(posts, 'this is the data from the post')
   try {
       const result = await deletePost(posts._id)
-        $(postElement).slideUp()
+       $(postElement).slideUp()
   }catch (error) {
       console.error(error)
   }
@@ -270,4 +277,81 @@ $("#myInput").on("keyup", function() {
   });
 
 
+
+  async function fetchMessages (postId, messageContent) {
+ 
+    try {
+        const response = await fetch(`${BASE_URL}/posts/${postId}/messages`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${myToken}`,
+          },
+          body: JSON.stringify(messageContent),
+        })
+  
+        const {data} = await response.json();
+        return data.user; 
+    } catch (error) {
+        throw error;
+    }
+  }
+
+  // const createMessageHTML = (user) => {
+  //   return ($(`
+  //       <div class="message-cards">
+  //       <div class='myMessageTitle'>Post Title: ${user.messages.post.title}</div>
+  //         <div class='myMessage'>The Message: ${user.messages.content}</div>
+  //         <div class='myMessageId'>From: ${user.messages.fromUser.username}</div>
+  //       </div>
+  //   `).data('data', user))
+  // };
+
+  const createMessageHTML = (messages) => {
+    return ($(`
+        <div class="message-cards">
+        <div class='myMessageTitle'>Post Title: ${messages.post.title}</div>
+          <div class='myMessage'>The Message: ${messages.content}</div>
+          <div class='myMessageId'>From: ${messages.fromUser.username}</div>
+        </div>
+    `).data('data', messages))
+  };
+
+  
+
+  $('.post-container').on('click', '.messageSubmit', async function (event) {
+    event.preventDefault();
+    
+    const postElement = $(this).closest('.cards');
+    console.log(postElement, 'this is from $this closest card')
+    let myContent = postElement.find('input[type="text"]').val()
+    console.log(myContent, 'from my .val() form')
+    const myMessage = postElement.data('data');
+    console.log(myMessage, 'this is the post data' )
+    const myPostId = myMessage._id
+    console.log(myPostId, 'this is the post id' )
+
+    $(postElement).find('.message-form').trigger('reset')
+    
+     
+    const messageData =  {
+   
+          message: {
+            content: myContent,
+          }
+    }
+      
+      try { 
+        const newMessages = await fetchMessages(myPostId, messageData)
+        const newCreatedMessage =  await createMessageHTML(messageData.user.messages)
+        console.log(newCreatedMessage, 'this is the new created message')
+      
+        
+       
+  
+    } catch (error) {
+        console.error(error)
+    }
+    
+  })
 
