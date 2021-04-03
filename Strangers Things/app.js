@@ -14,10 +14,6 @@ async function allPostsAtState () {
       posts.forEach((post) => {
         const postHTML = createPostHTML(post); 
         $(".post-container").append(postHTML);
-
-        for (const [key, value] of Object.entries(post)) {
-          console.log(`${key}: ${value}`);
-        }
       });
 
       return posts;
@@ -95,106 +91,16 @@ const createPostHTML = (post) => {
         
         <div class='card_back'>  
         <div class='post_header_back'><p>${post.title}</p></div>
-        <div class='post_price_back'><p>${post.price}</p></div>
+        <div class='post_price_back'><p>Price: ${post.price}</p></div>
             <div class='post_desc_back'><p>${post.description}</p></div>
             <div class="posted_by">
-                <span>User ${post.author.username}</span>
+                <span> Login/Register to Message Seller </span>
             </div>
         </div>
     </div>
     </div>
   `).data('data', post))
 };
-
-
-async function userCreatePost(postObj) {
-
-  try {
-    const response = await fetch(`${BASE_URL}/posts`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${myToken}`
-          },
-          body: JSON.stringify(postObj)
-        })
-
-      const newPost = await response.json();
-      return newPost
-
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-$('.post-submit').on('click', async function (event) {
-  event.preventDefault();
- 
-  const postData =  {
-    post: {
-      title: $('#post-title').val(),
-      description: $('#post-description').val(),
-      price: '200',
-      location: 'here',
-      willDeliver: false,
-      }
-    }
-
-    try {
-    
-      const newPost = await userCreatePost(postData)
-      const newCreatedPost =  createPostHTML(newPost.data.post)
-      $(".post-container").prepend(newCreatedPost)
-
-  } catch (error) {
-      console.error(error)
-  }
-  
-})
-
-async function deletePost (postId) {
- 
-  try {
-      const response = await fetch(`${BASE_URL}/posts/${postId}`, {
-          //config object
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${myToken}`
-          },
-      })
-
-      const {data} = await response.json();
-      return data; 
-  } catch (error) {
-      throw error;
-  }
-}
-
-
-
-$(".post-container").on("click", '.delete', async function () {
-  const postElement = $(this).closest('.cards');
-
- 
-  const post = postElement.data('data');
-  console.log(post, 'this is the data from the post')
-
-  try {
-      const result = await deletePost(post._id)
-      if(post.isAuthor) {
-        $(postElement).slideUp()
-      } else {
-        return
-      }
-      
-     
-  }catch (error) {
-      console.error(error)
-  }
-  
-
-});
 
 async function getUserToken (userNameVal, userPassVal) {
   
@@ -234,7 +140,7 @@ $('#register-form').on('submit', function (event) {
 
   modal.style.display = "none";
   
-
+  $('#register-form').trigger('reset')
 })
 
 async function userLoggedIn (userNameVal, userPassVal) {
@@ -274,7 +180,7 @@ $('#login-form').on('submit', function (event) {
     let userPass = $('#log-user-password').val()
     
     userLoggedIn (userVal, userPass)
-   
+    $('#login-form').trigger('reset')
     modal.style.display = "none";
     
    
